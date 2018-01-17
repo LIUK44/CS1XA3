@@ -1,0 +1,17 @@
+Bash1
+Jan 22 - 28
+
+Bash2
+Feb 5 - 11
+
+Elm1
+Feb 26 - Mar 4
+
+Elm2
+Mar 12 - 18
+
+Haskell1
+Mar 26 - Apr 1
+
+Haskell2
+Apr 2 - 8
