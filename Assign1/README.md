@@ -15,9 +15,11 @@
   
 
 ## Features:
-* Display the current time at the start     (**Reference:**) <http://tldp.org/LDP/Bash-Beginners-Guide/html/sect_01_05.html>
+* Display the current time at the start     
+⋅⋅**Reference:** <http://tldp.org/LDP/Bash-Beginners-Guide/html/sect_01_05.html>
 
-* Use a menu to call each functions     (**Reference:**) Get this idea from Arian Alex Aryafar's gitHub. Source code : [Here](https://github.com/aryafara/CS1XA3/blob/master/ProjectAnalyze.sh)
+* Use a menu to call each functions     
+⋅⋅**Reference:** Get this idea from Arian Alex Aryafar's gitHub. Source code : [Here](https://github.com/aryafara/CS1XA3/blob/master/ProjectAnalyze.sh)
 
 * Inform the user if the ".log" files store valid information
 
