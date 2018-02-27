@@ -1,7 +1,7 @@
 # Assignment1 Manual
 
 ## Required Command:
-1. Inform you if you're local repo is up to date with the remote repo and dispalys the modified and untracked files if you want
+1. Inform you if your local repo is up to date with the remote repo and dispalys the modified and untracked files if you want
 
 * Get the idea of --porcelain from <https://git-scm.com/docs/git-status>, which outpuuts an easy-to-parse format for scripts 
 
