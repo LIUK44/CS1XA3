@@ -1,5 +1,15 @@
 # Assignment3 Documentation
-
+## Requirement
+Build a math library in haskell for helping you with your Calculus homework. It should provide at least the following functionality:
+- An expression datatype that can encode
+   - Addition, Multiplication
+   - Cos, Sin, Log, Exp (natural)
+   - Variables
+   - Constants
+   - Can partially evaluate an expression (or fully)
+   - Can perform partial differentiation (symbolic)
+   - Can parse certain strings into an expression datatype (specify required format in documentation)
+   
 ## ExprType
 ExprType module creates a data type `Expr a` which has the following constructors:
 1. Add
