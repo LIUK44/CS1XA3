@@ -7,11 +7,9 @@ License : WTFPL
 Maintainer : liuk44@mcmaster.ca
 Stability : experimental
 Portability : POSIX
-TODO write a longer description of the module,
-containing some commentary with @some markup@.
 -}
 
-module ExprParser (parseExprD, parseExprF) where
+module ExprParser (parseExprI, parseExprI2, parseExprInt, parseExprInt2, parseExprD, parseExprD2, parseExprF, parseExprF2) where
 
 import ExprType
 import Text.Parsec

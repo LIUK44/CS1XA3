@@ -10,18 +10,15 @@ License : WTFPL
 Maintainer : liuk44@mcmaster.ca
 Stability : experimental
 Portability : POSIX
-TODO write a longer description of the module,
-containing some commentary with @some markup@.
 -}
 
 module ExprDiff where
 
 import           ExprType
-import ExprPretty
-
 import qualified Data.Map as Map
 
-{- Class DiffExpr:
+{- |
+ - Class DiffExpr:
  -     Differentiable Expressions
  - ----------------------------------------------
  - This class has methods over the Expr datatype
@@ -77,7 +74,8 @@ class DiffExpr a where
 
 
 
-{- Most intuative instance of DiffExpr
+{-|
+ - Most intuative instance of DiffExpr
  - Num instannces only relies on +,-
  - Float instances relies on the rest operations 
  - Methods:
@@ -114,25 +112,25 @@ instance (Num a, Floating a, Eq a) => DiffExpr a where
     simplify vrs (Add e1 (Add e2 e3)) = simplify vrs (Add (simplify vrs (Add e1 e2)) (simplify vrs e3)) 
 
     simplify vrs (Add e1 e2) = case e2 of                                                
-                                 Var x   -> case Map.lookup x vrs of                                     -- ^ If e2 is a variable, then looks up if variable is assigned to a value
-                                            Just v -> Const (eval vrs (Add e1 e2))                       -- ^ Yes, then plug in the value and gives a constant
-                                            Nothing -> Add (Const (eval vrs e1)) (Var x)                 -- ^ No, then leaves the variable there 
-                                 Add a b -> Add (simplify vrs e1) (simplify vrs (Add a b))               -- ^ If e2 is a long expression, sets it apart and puts it back to simplify function 
-                                 _       -> case e1 of                                                   -- ^ e2 is of other circumstances, thus check e1
-                                              Var x -> simplify vrs (Add e2 e1)                          -- ^ e1 is a variable, then reverses the order of e1 and e2, puts them back to simplify function
-                                              Add a b -> Add (simplify vrs e2) (simplify vrs (Add a b))  -- ^ a long expression, simplify it
-                                              _     -> Const $ eval vrs $ Add e1 e2                      -- ^ Both e1 and e2 are not variables, thus we can add them together
+                                 Var x   -> case Map.lookup x vrs of                                     -- If e2 is a variable, then looks up if variable is assigned to a value
+                                            Just v -> Const (eval vrs (Add e1 e2))                       -- Yes, then plug in the value and gives a constant
+                                            Nothing -> Add (Const (eval vrs e1)) (Var x)                 -- No, then leaves the variable there 
+                                 Add a b -> Add (simplify vrs e1) (simplify vrs (Add a b))               -- If e2 is a long expression, sets it apart and puts it back to simplify function 
+                                 _       -> case e1 of                                                   -- e2 is of other circumstances, thus check e1
+                                              Var x -> simplify vrs (Add e2 e1)                          -- e1 is a variable, then reverses the order of e1 and e2, puts them back to simplify function
+                                              Add a b -> Add (simplify vrs e2) (simplify vrs (Add a b))  -- a long expression, simplify it
+                                              _     -> Const $ eval vrs $ Add e1 e2                      -- Both e1 and e2 are not variables, thus we can add them together
     
 
     
-    simplify vrs (Add (Const 0) (Var x)) = Var x -- ^ Example : x + 0 = x
+    simplify vrs (Add (Const 0) (Var x)) = Var x --  Example : x + 0 = x
     simplify vrs (Add (Var x) (Const 0)) = Var x
 
     
     -- | Addition Communicative Law
     simplify vrs (Add (Var x) (Var y)) 
-        | x == y = Mult (Const 2) (Var x) -- ^ x + x = 2x 
-        | otherwise = Add (Var y) (Var x) -- ^ x + y = y + x
+        | x == y = Mult (Const 2) (Var x) -- x + x = 2x 
+        | otherwise = Add (Var y) (Var x) -- x + y = y + x
 
     
 
@@ -144,25 +142,25 @@ instance (Num a, Floating a, Eq a) => DiffExpr a where
     simplify vrs (Mult e1 (Mult e2 e3)) = simplify vrs (Mult (simplify vrs (Mult e1 e2)) (simplify vrs e3)) 
 
     simplify vrs (Mult e1 e2) = case e2 of 
-                                 Var x   -> case Map.lookup x vrs of                       -- ^ Basically do the same things as add simplification
-                                            Just v -> Const (eval vrs (Mult e1 e2))        -- ^ plug in the given value for the variable then multiply them together
-                                            Nothing -> Mult (Const (eval vrs e1)) (Var x)  -- ^ lookup failed, then leave the variable there
+                                 Var x   -> case Map.lookup x vrs of                       -- Basically do the same things as add simplification
+                                            Just v -> Const (eval vrs (Mult e1 e2))        -- plug in the given value for the variable then multiply them together
+                                            Nothing -> Mult (Const (eval vrs e1)) (Var x)  -- lookup failed, then leave the variable there
                                  Mult a b -> Mult (simplify vrs e1) (simplify vrs (Mult a b))
                                  _       -> case e1 of
                                               Var x -> simplify vrs (Mult e2 e1)
                                               Mult a b -> Mult (simplify vrs e2) (simplify vrs (Mult a b))
                                               _     -> Const $ eval vrs $ Mult e1 e2      
 
-    simplify vrs (Mult (Const 0) (Var x)) = Const 0 -- ^ x * 0 = 0
+    simplify vrs (Mult (Const 0) (Var x)) = Const 0 -- x * 0 = 0
     simplify vrs (Mult (Var x) (Const 0)) = Const 0
 
-    simplify vrs (Mult (Const 1) e2) = e2 -- ^ 1 * x = x
+    simplify vrs (Mult (Const 1) e2) = e2 -- 1 * x = x
     simplify vrs (Mult e1 (Const 1)) = e1
 
     -- | Multiplication Communicative Law
     simplify vrs (Mult (Var x) (Var y)) 
-        | x == y = Expt (Var x) (Const 2)  -- ^ x * x = x^2
-        | otherwise = Mult (Var y) (Var x) -- ^ x * y = y * x
+        | x == y = Expt (Var x) (Const 2)  -- x * x = x^2
+        | otherwise = Mult (Var y) (Var x) -- x * y = y * x
 
     -- | Distribution Law
     simplify vrs (Mult e1 (Add e2 e3)) = simplify vrs (Add (Mult e1 e2) (Mult e1 e3)) 
@@ -196,8 +194,9 @@ instance (Num a, Floating a, Eq a) => DiffExpr a where
                             False -> simplify vrs (Ln (simplify vrs e))
 
     -- *** Simplifying power function
-    simplify vrs (Expt (Const 1) e) = e
+    simplify vrs (Expt (Const 1) e) = Const 1
     simplify vrs (Expt _ (Const 0)) = Const 1
+    simplify vrs (Expt e (Const 1)) = e
     simplify vrs (Expt (Const e1) (Const e2)) = Const (eval vrs (Expt (Const e1) (Const e2)))
     simplify vrs (Expt (Var x) (Var y)) = case (Map.lookup x vrs) of
                                             Just v -> case (Map.lookup y vrs) of
@@ -233,7 +232,7 @@ instance (Num a, Floating a, Eq a) => DiffExpr a where
     partDiff v (Cos e) = Mult (Mult (Const (-1)) (Sin e)) (partDiff v e)
     partDiff v (Sin e) = Mult (Cos e) (partDiff v e)
     partDiff v (Ln e) = Mult (Expt e (Const (-1))) (partDiff v e)
-    partDiff v (Expt (Const b) (Var e)) = Mult ((Expt (Const b) (Var e))) (Ln (Const b))
+    partDiff v (Expt (Const b) (Var e)) = Mult (Ln (Const b)) ((Expt (Const b) (Var e))) 
     partDiff v (Expt (Var x) e) = Mult (Mult e (Expt (Var x) (Add e (Const (-1))))) (partDiff v (Var x))   
     partDiff v (Exp e) = Mult (Exp e) (partDiff v e)
                                                                                                 
@@ -241,24 +240,6 @@ instance (Num a, Floating a, Eq a) => DiffExpr a where
   
 
   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
