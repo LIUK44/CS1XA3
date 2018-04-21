@@ -29,7 +29,7 @@ import Data.List
  -     Exp - unary exponential function
  -}
 
--- / a datatype for encoding numeric 
+-- * DataType Decleration
 data Expr a = Add (Expr a) (Expr a) 
             | Mult (Expr a) (Expr a)
             | Const a
@@ -45,7 +45,8 @@ data Expr a = Add (Expr a) (Expr a)
  -         retrieves variable identifiers from
  -         an Expr type
  -}
-
+ 
+-- * Miscellaneous Functions
 getVars :: Expr a -> [String] 
 getVars (Add e1 e2) = getVars e1 `union` getVars e2  
 -- ^ get variables from expression e1 and e2, then concatetates to a list of variables
