@@ -124,8 +124,8 @@ ExprParser module contains Parsers to parse a string to an expression of Expr a.
 | val 2 !* var "x" | 2 * x |
 | cos (var "x") | cosx |
 | sin (var "x") | sin x |
-| expt (var "x") (val 2) | x ^ 2 |
-| expt (val 2) (var "x") | 2 ^ x |
+| (var "x")  !^ (val 2) | x ^ 2 |
+| (val 2) !^ (var "x") | 2 ^ x |
 | ln (var "x") | ln x |
 
 **Reference:** Since some of the constructors in (Expr a) only have one parameter, `chainl` does not work in this case, so we need to define another parseExpr for each type again. Get the idea from @barskyn on gitHub. Source code: [Here](https://github.com/barskyn/CS1XA3/blob/master/Assign3/assign3/ExprParser.hs)
